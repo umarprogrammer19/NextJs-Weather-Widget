@@ -34,7 +34,6 @@ export default function WeatherWidget() {
         }
         setLoading(true);
         setError(null);
-        // 2aabea5f82e14886a5e131324242408
         try {
             const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=${trimmedLocation}`);
         } catch {
