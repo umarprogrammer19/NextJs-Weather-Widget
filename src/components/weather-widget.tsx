@@ -55,6 +55,31 @@ export default function WeatherWidget() {
         }
     };
 
+    function getWeatherMessage(description: string): string {
+        switch (description.toLowerCase()) {
+            case "sunny":
+                return "It's a beautiful sunny day!";
+            case "partly cloudy":
+                return "Expect some clouds and sunshine.";
+            case "cloudy":
+                return "It's cloudy today.";
+            case "overcast":
+                return "The sky is overcast.";
+            case "rain":
+                return "Don't forget your umbrella! It's raining.";
+            case "thunderstorm":
+                return "Thunderstorms are expected today.";
+            case "snow":
+                return "Bundle up! It's snowing.";
+            case "mist":
+                return "It's misty outside.";
+            case "fog":
+                return "Be careful, there's fog outside.";
+            default:
+                return description; // Default to returning the description as-is
+        }
+    };
+
     const getTemperatureMessage = (temperature: number, unit: string): string => {
         if (unit === "C") {
             if (temperature < 0) {
@@ -72,7 +97,7 @@ export default function WeatherWidget() {
             return `${temperature}°${unit}`;
         }
     };
-    
+
     return (
         <h1>Weather Widget</h1>
     )
