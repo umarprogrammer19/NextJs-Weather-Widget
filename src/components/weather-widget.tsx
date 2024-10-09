@@ -54,6 +54,25 @@ export default function WeatherWidget() {
             setLoading(false);
         }
     };
+
+    const getTemperatureMessage = (temperature: number, unit: string): string => {
+        if (unit === "C") {
+            if (temperature < 0) {
+                return `It's freezing at ${temperature}°C! Bundle up!`;
+            } else if (temperature < 10) {
+                return `It's quite cold at ${temperature}°C. Wear warm clothes.`;
+            } else if (temperature < 20) {
+                return `The temperature is ${temperature}°C. Comfortable for a light jacket.`;
+            } else if (temperature < 30) {
+                return `It's a pleasant ${temperature}°C. Enjoy the nice weather!`;
+            } else {
+                return `It's hot at ${temperature}°C. Stay hydrated!`;
+            }
+        } else {
+            return `${temperature}°${unit}`;
+        }
+    };
+    
     return (
         <h1>Weather Widget</h1>
     )
