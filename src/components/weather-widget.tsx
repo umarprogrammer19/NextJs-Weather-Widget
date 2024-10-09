@@ -9,7 +9,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CloudIcon, MapPinIcon, ThermometerIcon } from "lucide-react";
-import React, { useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 
 interface WeatherData {
     temperature: number;
@@ -24,8 +24,8 @@ export default function WeatherWidget() {
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const handleSearch = async () => {
-        // event.preventDefult();
+    const handleSearch = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         const trimmedLocation = location.trim();
         if (trimmedLocation === "") {
             setError("Please Enter a Valid Location");
