@@ -48,7 +48,11 @@ export default function WeatherWidget() {
             }
             setWeather(weatherData);
         } catch (error) {
-            setError("City not found. Please try again.");
+            if (error instanceof TypeError) {
+                setError("Network error. Please try again later.");
+            } else {
+                setError("City not found. Please try again.");
+            }
             setWeather(null);
         } finally {
             setIsLoading(false);
