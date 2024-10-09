@@ -22,7 +22,7 @@ export default function WeatherWidget() {
     const [location, setLocation] = useState<string>("");
     const [weather, setWeather] = useState<WeatherData | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [loadind, setLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleSearch = async () => {
         // event.preventDefult();
@@ -32,7 +32,7 @@ export default function WeatherWidget() {
             setWeather(null);
             return
         }
-        setLoading(true);
+        setIsLoading(true);
         setError(null);
         try {
             const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=${trimmedLocation}`);
@@ -51,7 +51,7 @@ export default function WeatherWidget() {
             setError("City not found. Please try again.");
             setWeather(null);
         } finally {
-            setLoading(false);
+            setIsLoading(false);
         }
     };
 
@@ -105,6 +105,60 @@ export default function WeatherWidget() {
     }
 
     return (
-        <h1>Weather Widget</h1>
+        <div className="flex justify-center items-center h-screen">
+            {/* Center the card within the screen */}
+            <Card className="w-full max-w-md mx-auto text-center">
+                {/* Card header with title and description */}
+                <CardHeader>
+                    <CardTitle>Weather Widget</CardTitle>
+                    <CardDescription>
+                        Search for the current weather conditions in your city.
+                    </CardDescription>
+                </CardHeader>
+                {/* Card content including the search form and weather display */}
+                <CardContent>
+                    {/* Form to input and submit the location */}
+                    <form onSubmit={handleSearch} className="flex items-center gap-2">
+                        <Input
+                            type="text"
+                            placeholder="Enter a city name"
+                            value={location}
+                            onChange={
+                                (e: ChangeEvent<HTMLInputElement>) =>
+                                    setLocation(e.target.value) // Update location state on input change
+                            }
+                        />
+                        <Button type="submit" disabled={isLoading}>
+                            {isLoading ? "Loading..." : "Search"}{" "}
+                            {/* Show "Loading..." text while fetching data */}
+                        </Button>
+                    </form>
+                    {/* Display error message if any */}
+                    {error && <div className="mt-4 text-red-500">{error}</div>}
+                    {/* Display weather data if available */}
+                    {weather && (
+                        <div className="mt-4 grid gap-2">
+                            {/* Display temperature message with icon */}
+                            <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2">
+                                    <ThermometerIcon className="w-6 h-6" />
+                                    {getTemperatureMessage(weather.temperature, weather.unit)}
+                                </div>
+                            </div>
+                            {/* Display weather description message with icon */}
+                            <div className="flex items-center gap-2">
+                                <CloudIcon className="w-6 h-6 " />
+                                <div>{getWeatherMessage(weather.description)}</div>
+                            </div>
+                            {/* Display location message with icon */}
+                            <div className="flex items-center gap-2">
+                                <MapPinIcon className="w-6 h-6 " />
+                                <div>{getLocationMessage(weather.location)}</div>
+                            </div>
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
+        </div>
     )
 }
