@@ -9,7 +9,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CloudIcon, MapPinIcon, ThermometerIcon } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 
 interface WeatherData {
     temperature: number;
@@ -23,6 +23,24 @@ export default function WeatherWidget() {
     const [weather, setWeather] = useState<WeatherData | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loadind, setLoading] = useState<boolean>(false);
+
+    const handleSearch = async () => {
+        // event.preventDefult();
+        const trimmedLocation = location.trim();
+        if (trimmedLocation === "") {
+            setError("Please Enter a Valid Location");
+            setWeather(null);
+            return
+        }
+        setLoading(true);
+        setError(null);
+        // 2aabea5f82e14886a5e131324242408
+        try {
+            const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=${trimmedLocation}`);
+        } catch {
+
+        }
+    }
     return (
         <h1>Weather Widget</h1>
     )
