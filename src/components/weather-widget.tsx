@@ -127,10 +127,8 @@ export default function WeatherWidget() {
                             type="text"
                             placeholder="Enter a city name"
                             value={location}
-                            onChange={
-                                (e: ChangeEvent<HTMLInputElement>) =>
-                                    setLocation(e.target.value) // Update location state on input change
-                            }
+                            disabled={isLoading}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setLocation(e.target.value.trim())}
                         />
                         <Button type="submit" disabled={isLoading}>
                             {isLoading ? "Loading..." : "Search"}{" "}
