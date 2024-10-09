@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CloudIcon, MapPinIcon, ThermometerIcon } from "lucide-react";
 import React, { ChangeEvent, FormEvent, useState } from "react";
+import LoadingSpinner from "./loadingSpinner";
 
 interface WeatherData {
     temperature: number;
@@ -131,9 +132,9 @@ export default function WeatherWidget() {
                             onChange={(e: ChangeEvent<HTMLInputElement>) => setLocation(e.target.value.trim())}
                         />
                         <Button type="submit" disabled={isLoading}>
-                            {isLoading ? "Loading..." : "Search"}{" "}
-                            {/* Show "Loading..." text while fetching data */}
+                            {isLoading ? <LoadingSpinner /> : "Search"}
                         </Button>
+
                     </form>
                     {/* Display error message if any */}
                     {error && <div className="mt-4 text-red-500">{error}</div>}
