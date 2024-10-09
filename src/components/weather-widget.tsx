@@ -31,12 +31,14 @@ export default function WeatherWidget() {
         if (trimmedLocation === "") {
             setError("Please Enter a Valid Location");
             setWeather(null);
-            return
+            return;
         }
         setIsLoading(true);
         setError(null);
         try {
-            const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=${trimmedLocation}`);
+            const response = await fetch(
+                `https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=${trimmedLocation}`
+            );
             if (!response.ok) {
                 throw new Error("City Not Found");
             }
@@ -46,7 +48,7 @@ export default function WeatherWidget() {
                 description: data.current.condition.text,
                 location: data.location.name,
                 unit: "C",
-            }
+            };
             setWeather(weatherData);
         } catch (error) {
             if (error instanceof TypeError) {
@@ -99,9 +101,9 @@ export default function WeatherWidget() {
             case "fog":
                 return "Be careful, there's fog outside.";
             default:
-                return description; // Default to returning the description as-is
+                return description;
         }
-    };
+    }
 
     function getLocationMessage(location: string): string {
         const currentHour = new Date().getHours();
@@ -110,13 +112,13 @@ export default function WeatherWidget() {
     }
 
     return (
-        <div className="flex justify-center items-center h-screen">
+        <div className="flex justify-center items-center h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
             {/* Center the card within the screen */}
-            <Card className="w-full max-w-sm sm:max-w-md mx-auto text-center">
+            <Card className="w-full max-w-sm sm:max-w-md mx-auto text-center bg-gray-800 text-white shadow-lg rounded-lg">
                 {/* Card header with title and description */}
                 <CardHeader>
-                    <CardTitle>Weather Widget</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-2xl text-cyan-400">Weather Widget</CardTitle>
+                    <CardDescription className="text-gray-400">
                         Search for the current weather conditions in your city.
                     </CardDescription>
                 </CardHeader>
@@ -126,42 +128,44 @@ export default function WeatherWidget() {
                     <form onSubmit={handleSearch} className="flex items-center gap-2">
                         <Input
                             type="text"
+                            className="flex-grow p-2 rounded-lg text-black"
                             placeholder="Enter a city name"
                             value={location}
                             disabled={isLoading}
                             onChange={(e: ChangeEvent<HTMLInputElement>) => setLocation(e.target.value.trim())}
                         />
-                        <Button type="submit" disabled={isLoading}>
+                        <Button
+                            type="submit"
+                            className="bg-cyan-400 hover:bg-cyan-500 text-white px-4 py-2 rounded-lg transition-colors duration-300"
+                            disabled={isLoading}
+                        >
                             {isLoading ? <LoadingSpinner /> : "Search"}
                         </Button>
-
                     </form>
                     {/* Display error message if any */}
                     {error && <div className="mt-4 text-red-500">{error}</div>}
                     {/* Display weather data if available */}
                     {weather && (
-                        <div className="mt-4 grid gap-2">
+                        <div className="mt-6 grid gap-4">
                             {/* Display temperature message with icon */}
-                            <div className="flex items-center gap-2">
-                                <div className="flex items-center gap-2">
-                                    <ThermometerIcon className="w-6 h-6" />
-                                    {getTemperatureMessage(weather.temperature, weather.unit)}
-                                </div>
+                            <div className="flex items-center justify-center gap-2 text-lg">
+                                <ThermometerIcon className="w-6 h-6 text-cyan-400" />
+                                {getTemperatureMessage(weather.temperature, weather.unit)}
                             </div>
                             {/* Display weather description message with icon */}
-                            <div className="flex items-center gap-2">
-                                <CloudIcon className="w-6 h-6 " />
-                                <div>{getWeatherMessage(weather.description)}</div>
+                            <div className="flex items-center justify-center gap-2 text-lg">
+                                <CloudIcon className="w-6 h-6 text-cyan-400" />
+                                {getWeatherMessage(weather.description)}
                             </div>
                             {/* Display location message with icon */}
-                            <div className="flex items-center gap-2">
-                                <MapPinIcon className="w-6 h-6 " />
-                                <div>{getLocationMessage(weather.location)}</div>
+                            <div className="flex items-center justify-center gap-2 text-lg">
+                                <MapPinIcon className="w-6 h-6 text-cyan-400" />
+                                {getLocationMessage(weather.location)}
                             </div>
                         </div>
                     )}
                 </CardContent>
             </Card>
         </div>
-    )
+    );
 }
